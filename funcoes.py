@@ -14,3 +14,5 @@
 
 # ==========-----========== REGISTROS DE DESEMPENHO DAS ESTAÇÕES (QUESTÃO F) ==========-----==========
 
+
+# ==========-----========== MENU INTERATIVO (QUESTÃO G) ==========-----==========
