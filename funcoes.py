@@ -21,19 +21,31 @@ def cadastrar_estacao():
             print("Digite um número inteiro válido.")
 
     # bairro
-    bairro = input("Digite o bairro da estação: ")
+    bairro = input("Digite o bairro da estação: ").strip()
 
-    # não permite deixar o bairro vazio
     while bairro == "":
         print("O bairro não pode ficar vazio.")
-        bairro = input("Digite o bairro da estação: ")
+        bairro = input("Digite o bairro da estação: ").strip()
+
+    while True:
+        try:
+            volume = float(input("Digite o volume inicial de resíduos (kg): "))
+            if volume >= 0:
+                break
+            else:
+                print("O volume não pode ser negativo.")
+        except ValueError:
+            print("Digite um valor numérico válido.")
 
     estacoes[codigo] = {
-        "bairro": bairro
+        "bairro": bairro,
+        "volume": volume
     }
 
-
-# ==========-----========== (QUESTÃO B) ==========-----==========
+    print("\n=== Estação cadastrada ===")
+    print("Código:", codigo)
+    print("Bairro:", bairro)
+    print("Volume inicial de resíduos:", format(volume, ".2f"), "kg")
 
 # ==========-----========== (QUESTÃO B) ==========-----==========
 
@@ -66,19 +78,55 @@ def calcular_creditos_carbono():
     print("Créditos de carbono gerados:", format(creditos, ".2f"))
     print("Classificação:", categoria)
 
-calcular_creditos_carbono()
-                    
-        
 
 
 # ==========-----=========== NOTIFICAÇÕES DAS ESTAÇÕES (QUESTÃO C) ==========-----==========
 
-def analisar_limites_descarte (lista_descartes, limite_alerta, limite_tolerancia):
+def analisar_limites_descarte():
+    print("\n=== Auditoria de Descartes ===")
+
+    while True:
+        try:
+            limite_alerta = float(input("Digite o limite de alerta (kg): "))
+            limite_tolerancia = float(input("Digite o limite de tolerância operacional (kg): "))
+            if limite_alerta >= 0 and limite_tolerancia >= limite_alerta:
+                break
+            else:
+                print("Os limites não podem ser negativos e a tolerância deve ser maior ou igual ao alerta.")
+        except ValueError:
+            print("Digite um valor numérico válido.")
+
+    lista_descartes = []
+    print("\n--- Registro dos últimos 10 dias ---")
+
+    for i in range(10):
+        while True:
+            try:
+                quantidade = float(input(f"Digite a quantidade de plástico descartado no dia {i + 1} (kg): "))
+                if quantidade >= 0:
+                    lista_descartes.append(quantidade)
+                    break
+                else:
+                    print("A quantidade não pode ser negativa.")
+            except ValueError:
+                print("Digite um valor numérico válido.")
+
+    print("\n--- Resultado da Auditoria ---")
+
+    ocorrencias = 0
+
     for i in range(len(lista_descartes)):
         quantidade = lista_descartes[i]
 
         if quantidade > limite_tolerancia:
-            print(f"Alerta! No dia {i + 1}, o descarte de {quantidade}kg excedeu a tolerância operacional de {limite_tolerancia}kg!")
+            print(f"CRÍTICO: No dia {i + 1}, o descarte de {quantidade}kg excedeu a tolerância operacional de {limite_tolerancia}kg!")
+            ocorrencias = ocorrencias + 1
+        elif quantidade > limite_alerta:
+            print(f"Alerta: No dia {i + 1}, o descarte de {quantidade}kg excedeu o limite de alerta de {limite_alerta}kg.")
+            ocorrencias = ocorrencias + 1
+
+    if ocorrencias == 0:
+        print("Nenhum limite foi excedido nos últimos 10 dias.")
 
 # ==========-----========== (QUESTÃO D) ==========-----==========
 
@@ -198,3 +246,60 @@ def filtrar_estacoes_por_eficiencia(base_dados, criterio_corte):
     return estacoes_aprovadas
 
 # ==========-----========== MENU INTERATIVO (QUESTÃO G) ==========-----==========
+# ==========-----========== MENU INTERATIVO (QUESTÃO G) ==========-----==========
+
+def main():
+    while True:
+        print("\n========== EcoCity ==========")
+        print("1 - Cadastrar estação")
+        print("2 - Calcular créditos de carbono")
+        print("3 - Auditar descartes")
+        print("4 - Acompanhar caçambas")
+        print("5 - Analisar coleta mensal")
+        print("6 - Filtrar estações por eficiência")
+        print("0 - Sair")
+
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == "1":
+            cadastrar_estacao()
+
+        elif opcao == "2":
+            calcular_creditos_carbono()
+
+        elif opcao == "3":
+            analisar_limites_descarte()
+
+        elif opcao == "4":
+            acompanhar_cacambas()
+
+        elif opcao == "5":
+            analisar_coleta_mensal(50)
+
+        elif opcao == "6":
+            base_dados = {
+                1: 80,
+                2: 65,
+                3: 90,
+                4: 40
+            }
+
+            criterio_corte = 60
+
+            resultado = filtrar_estacoes_por_eficiencia(
+                base_dados,
+                criterio_corte
+            )
+
+            print("\n=== Estações aprovadas ===")
+            print(resultado)
+
+        elif opcao == "0":
+            print("Programa encerrado.")
+            break
+
+        else:
+            print("Opção inválida. Tente novamente.")
+
+
+main()
