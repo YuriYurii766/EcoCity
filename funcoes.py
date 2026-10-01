@@ -43,33 +43,41 @@ def cadastrar_estacao():
         except ValueError:
             print("Digite um valor numérico válido.")
 
-    # exibição dos dados
+    
     print("\n=== Dados da Estação ===")
     print("Código:", codigo)
     print("Bairro:", bairro)
     print("Volume inicial:", format(volume, ".2f"), "kg")
+    return {
+            "codigo": codigo,
+            "bairro": bairro,
+            "volume": volume}
 
-cadastrar_estacao()
+
 
 # ==========-----========== (QUESTÃO B) ==========-----==========
 
 def calcular_creditos_carbono():
     print("\n=== Cálculo de Créditos de Carbono ===")
+    estacao = cadastrar_estacao()
+    peso = estacao["volume"]
+    desempenho_ecologico = {
+            "baixo": "Baixo impacto",
+            "moderado": "Sustentabilidade Moderada",
+            "avancado": "Polo Verde Avançado"}
+    creditos = peso * 0.5
+    
+    if creditos<500:
+        return desempenho_ecologico["baixo"]
+    elif creditos<=2000:
+        return desempenho_ecologico["moderado"]
+    else:
+        return desempenho_ecologico["avancado"]
 
-    # peso material reciclável
-    while True:
-        try:
-            peso = float(input("Digite o peso de material reciclável coletado (kg): "))
 
-            # aceita zero ou valores positivos
-            if peso >= 0:
-                break
-            else:
-                print("O peso não pode ser negativo.")
+                    
+        
 
-        # evita caso seja digitado texto
-        except ValueError:
-            print("Digite um valor numérico válido.")
 
 # ==========-----=========== NOTIFICAÇÕES DAS ESTAÇÕES (QUESTÃO C) ==========-----==========
 
