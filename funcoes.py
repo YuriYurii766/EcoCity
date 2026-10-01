@@ -1,4 +1,5 @@
 # ==========-----========== (QUESTÃO A) ==========-----==========
+estacoes = {}
 
 def cadastrar_estacao():
     print("=== Cadastro da Estação Ecológica ===")
@@ -27,49 +28,48 @@ def cadastrar_estacao():
         print("O bairro não pode ficar vazio.")
         bairro = input("Digite o bairro da estação: ")
 
-    # volume de resíduos
-    
-    while True:
-        try:
-            volume = float(input("Digite o volume inicial de resíduos (kg): "))
+    estacoes[codigo] = {
+        "bairro": bairro
+    }
 
-            # volume pode ser zero mas nao pode ser negativo
-            if volume >= 0:
-                break
-            else:
-                print("O volume não pode ser negativo.")
-
-        # evita erro se digitar algo que nao seja número
-        except ValueError:
-            print("Digite um valor numérico válido.")
-
-    # exibição dos dados
-    print("\n=== Dados da Estação ===")
-    print("Código:", codigo)
-    print("Bairro:", bairro)
-    print("Volume inicial:", format(volume, ".2f"), "kg")
-
-cadastrar_estacao()
 
 # ==========-----========== (QUESTÃO B) ==========-----==========
+
+# ==========-----========== (QUESTÃO B) ==========-----==========
+
+CREDITO_POR_KG = 0.05        # créditos de carbono gerados por kg reciclado
+LIMITE_MODERADO = 50         # a partir daqui: Sustentabilidade Moderada
+LIMITE_AVANCADO = 200        # a partir daqui: Polo Verde Avançado
 
 def calcular_creditos_carbono():
     print("\n=== Cálculo de Créditos de Carbono ===")
 
-    # peso material reciclável
     while True:
         try:
             peso = float(input("Digite o peso de material reciclável coletado (kg): "))
-
-            # aceita zero ou valores positivos
             if peso >= 0:
                 break
             else:
                 print("O peso não pode ser negativo.")
-
-        # evita caso seja digitado texto
         except ValueError:
             print("Digite um valor numérico válido.")
+
+    creditos = peso * CREDITO_POR_KG
+
+    if creditos < LIMITE_MODERADO:
+        categoria = "Baixo Impacto"
+    elif creditos < LIMITE_AVANCADO:
+        categoria = "Sustentabilidade Moderada"
+    else:
+        categoria = "Polo Verde Avançado"
+
+    print("Créditos de carbono gerados:", format(creditos, ".2f"))
+    print("Classificação:", categoria)
+
+calcular_creditos_carbono()
+                    
+        
+
 
 # ==========-----=========== NOTIFICAÇÕES DAS ESTAÇÕES (QUESTÃO C) ==========-----==========
 
