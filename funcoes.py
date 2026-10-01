@@ -1,4 +1,5 @@
 # ==========-----========== (QUESTÃO A) ==========-----==========
+estacoes = {}
 
 def cadastrar_estacao():
     print("=== Cadastro da Estação Ecológica ===")
@@ -27,54 +28,45 @@ def cadastrar_estacao():
         print("O bairro não pode ficar vazio.")
         bairro = input("Digite o bairro da estação: ")
 
-    # volume de resíduos
-    
-    while True:
-        try:
-            volume = float(input("Digite o volume inicial de resíduos (kg): "))
-
-            # volume pode ser zero mas nao pode ser negativo
-            if volume >= 0:
-                break
-            else:
-                print("O volume não pode ser negativo.")
-
-        # evita erro se digitar algo que nao seja número
-        except ValueError:
-            print("Digite um valor numérico válido.")
-
-    
-    print("\n=== Dados da Estação ===")
-    print("Código:", codigo)
-    print("Bairro:", bairro)
-    print("Volume inicial:", format(volume, ".2f"), "kg")
-    return {
-            "codigo": codigo,
-            "bairro": bairro,
-            "volume": volume}
-
+    estacoes[codigo] = {
+        "bairro": bairro
+    }
 
 
 # ==========-----========== (QUESTÃO B) ==========-----==========
 
+# ==========-----========== (QUESTÃO B) ==========-----==========
+
+CREDITO_POR_KG = 0.05        # créditos de carbono gerados por kg reciclado
+LIMITE_MODERADO = 50         # a partir daqui: Sustentabilidade Moderada
+LIMITE_AVANCADO = 200        # a partir daqui: Polo Verde Avançado
+
 def calcular_creditos_carbono():
     print("\n=== Cálculo de Créditos de Carbono ===")
-    estacao = cadastrar_estacao()
-    peso = estacao["volume"]
-    desempenho_ecologico = {
-            "baixo": "Baixo impacto",
-            "moderado": "Sustentabilidade Moderada",
-            "avancado": "Polo Verde Avançado"}
-    creditos = peso * 0.5
-    
-    if creditos<500:
-        return desempenho_ecologico["baixo"]
-    elif creditos<=2000:
-        return desempenho_ecologico["moderado"]
+
+    while True:
+        try:
+            peso = float(input("Digite o peso de material reciclável coletado (kg): "))
+            if peso >= 0:
+                break
+            else:
+                print("O peso não pode ser negativo.")
+        except ValueError:
+            print("Digite um valor numérico válido.")
+
+    creditos = peso * CREDITO_POR_KG
+
+    if creditos < LIMITE_MODERADO:
+        categoria = "Baixo Impacto"
+    elif creditos < LIMITE_AVANCADO:
+        categoria = "Sustentabilidade Moderada"
     else:
-        return desempenho_ecologico["avancado"]
+        categoria = "Polo Verde Avançado"
 
+    print("Créditos de carbono gerados:", format(creditos, ".2f"))
+    print("Classificação:", categoria)
 
+calcular_creditos_carbono()
                     
         
 
